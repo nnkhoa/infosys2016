@@ -1,0 +1,267 @@
+1. SELECT * FROM employees;
+
+Output:
+	| 499988 | 1962-09-28 | Bangqing       | Kleiser          | F      | 1986-06-06
+	|
+	| 499989 | 1954-05-26 | Keiichiro      | Lindqvist        | M      | 1993-10-28
+	|
+	| 499990 | 1963-11-03 | Khaled         | Kohling          | M      | 1985-10-10
+	|
+	| 499991 | 1962-02-26 | Pohua          | Sichman          | F      | 1989-01-12
+	|
+	| 499992 | 1960-10-12 | Siamak         | Salverda         | F      | 1987-05-10
+	|
+	| 499993 | 1963-06-04 | DeForest       | Mullainathan     | M      | 1997-04-07
+	|
+	| 499994 | 1952-02-26 | Navin          | Argence          | F      | 1990-04-24
+	|
+	| 499995 | 1958-09-24 | Dekang         | Lichtner         | F      | 1993-01-12
+	|
+	| 499996 | 1953-03-07 | Zito           | Baaz             | M      | 1990-09-27
+	|
+	| 499997 | 1961-08-03 | Berhard        | Lenart           | M      | 1986-04-21
+	|
+	| 499998 | 1956-09-05 | Patricia       | Breugel          | M      | 1993-10-13
+	|
+	| 499999 | 1958-05-01 | Sachin         | Tsukuda          | M      | 1997-11-30
+	|
+	+--------+------------+----------------+------------------+--------+------------
+	+
+	300024 rows in set (0.48 sec)
+
+2. SELECT * FROM departments;
+Output:
+	+---------+--------------------+
+	| dept_no | dept_name          |
+	+---------+--------------------+
+	| d009    | Customer Service   |
+	| d005    | Development        |
+	| d002    | Finance            |
+	| d003    | Human Resources    |
+	| d001    | Marketing          |
+	| d004    | Production         |
+	| d006    | Quality Management |
+	| d008    | Research           |
+	| d007    | Sales              |
+	+---------+--------------------+
+	9 rows in set (0.00 sec)
+
+3. SELECT CONCAT(first_name, ' ', last_name) AS fullname FROM employees;
+Output:
+	| Prasadram Waleschkowski        |
+	| Gino Usery                     |
+	| Yunming Mitina                 |
+	| Mohammed Pleszkun              |
+	| Uri Juneja                     |
+	| Kaijung Rodham                 |
+	| Gila Lukaszewicz               |
+	| Nathan Ranta                   |
+	| Rimli Dusink                   |
+	| Bangqing Kleiser               |
+	| Keiichiro Lindqvist            |
+	| Khaled Kohling                 |
+	| Pohua Sichman                  |
+	| Siamak Salverda                |
+	| DeForest Mullainathan          |
+	| Navin Argence                  |
+	| Dekang Lichtner                |
+	| Zito Baaz                      |
+	| Berhard Lenart                 |
+	| Patricia Breugel               |
+	| Sachin Tsukuda                 |
+	+--------------------------------+
+	300024 rows in set (0.38 sec
+
+4. SELECT dept_name FROM departments;
+Output:
+	+--------------------+
+	| dept_name          |
+	+--------------------+
+	| Customer Service   |
+	| Development        |
+	| Finance            |
+	| Human Resources    |
+	| Marketing          |
+	| Production         |
+	| Quality Management |
+	| Research           |
+	| Sales              |
+	+--------------------+
+	9 rows in set (0.01 sec)
+
+5. SELECT CONCAT(first_name, ' ', last_name) AS fullname
+	FROM departments R1 JOIN dept_emp R2 
+	ON R1.dept_no = R2.dept_no
+	JOIN employees R3
+	ON R2.emp_no = R3.emp_no
+	WHERE R1.`dept_name` = 'Sales';
+Output:
+	| Morris Smeets                 |
+	| Fumiko Luke                   |
+	| Chenyi Hainaut                |
+	| Jagoda Lanphier               |
+	| Maja Lamba                    |
+	| Raimond Leuchs                |
+	| Mong Usdin                    |
+	| Make Terekhov                 |
+	| Aloke Wuwongse                |
+	| Masako Angiulli               |
+	| Christ Murtagh                |
+	| Youpyo Perfilyeva             |
+	| Leszek Pulkowski              |
+	| Gaetan Veldwijk               |
+	| Mihalis Crabtree              |
+	| Bangqing Bodoff               |
+	| Guozhong Felder               |
+	| Gino Usery                    |
+	| Nathan Ranta                  |
+	| Rimli Dusink                  |
+	| Bangqing Kleiser              |
+	+-------------------------------+
+	52245 rows in set (1.34 sec)
+
+6. SELECT CONCAT(first_name, ' ', last_name) AS fullname
+	FROM departments R1 JOIN dept_emp R2 
+	ON R1.dept_no = R2.dept_no
+	JOIN employees R3
+	ON R2.emp_no = R3.emp_no
+	WHERE R1.dept_name = 'Finance' and R3.gender = 'M';
+Output:
+	| Bodo Rosay                   |
+	| Subhada Schaft               |
+	| Peer Gist                    |
+	| Sachio Cannane               |
+	| Huican Gelosh                |
+	| Masamitsu Matheson           |
+	| Doohun Pelz                  |
+	| Parto Kambil                 |
+	| Haldun Mullainathan          |
+	| Ymte Potthoff                |
+	| Nagui Stamatiou              |
+	| Bernd Gluchowski             |
+	| Phillip Panienski            |
+	| Sastry Szmurlo               |
+	| Jacopo Hasham                |
+	| Moon Pleszkun                |
+	| Hercules Porotnikoff         |
+	| Shaz Bierbaum                |
+	| Masali Chorvat               |
+	| Keiichiro Lindqvist          |
+	| Patricia Breugel             |
+	+------------------------------+
+	10331 rows in set (0.35 sec)
+
+7. SELECT CONCAT(first_name, ' ', last_name) AS fullname
+	FROM departments R1 JOIN dept_emp R2 
+	ON R1.dept_no = R2.dept_no
+	JOIN employees R3
+	ON R2.emp_no = R3.emp_no
+	WHERE R1.dept_name = 'Marketing' and R3.gender = 'F';
+Output:
+	| Abdelkader Ghazalie         |
+	| Zhensheng Ranai             |
+	| Ranga Bahr                  |
+	| Danai Vigier                |
+	| Zeljko Cromarty             |
+	| Hirochika Koprowski         |
+	| Heeju Buescher              |
+	| Ger Nollmann                |
+	| Alper Peck                  |
+	| Xiaoshan Sigstam            |
+	| Luerbio Leaver              |
+	| Breannda Gajiwala           |
+	| Vesna Attimonelli           |
+	| Kinh Sommer                 |
+	| Turgut Levasseur            |
+	| Gopalakrishnan Maierhofer   |
+	| Moriyoshi Pusterhofer       |
+	| JiYoung Coney               |
+	| Adhemar Gist                |
+	| Tonia Butner                |
+	| Siamak Salverda             |
+	+-----------------------------+
+	8037 rows in set (0.74 sec)
+
+8. SELECT CONCAT(R1.first_name, ' ', R1.last_name) AS fullname
+	FROM (employees R1 JOIN dept_emp ON R1.emp_no = dept_emp.emp_no)
+	JOIN 
+	(dept_manager JOIN employees R2 ON dept_manager.emp_no = R2.emp_no)
+	ON dept_emp.dept_no = dept_manager.dept_no
+	WHERE R1.last_name = R2.last_name AND R1.first_name != R2.first_name;
+Output:
+	| Parke Spinelli         |
+	| Kellie Spinelli        |
+	| Zhigen Spinelli        |
+	| Hilari Spinelli        |
+	| Stabislas Weedman      |
+	| Shimshon Weedman       |
+	| Yagil Weedman          |
+	| Valter Weedman         |
+	| Apostol Weedman        |
+	| Maya Weedman           |
+	| Mamdouh Weedman        |
+	| Feipei Weedman         |
+	| Valdiodio Weedman      |
+	| Saeed Weedman          |
+	| Wanqing Weedman        |
+	| Shen Weedman           |
+	| Dinkar Weedman         |
+	| Jaques Weedman         |
+	| Marc Weedman           |
+	+------------------------+
+	548 rows in set (22.75 sec)
+
+9. SELECT CONCAT(first_name, ' ', last_name) AS fullname
+	FROM (employees JOIN dept_manager R1 ON employees.emp_no = R1.emp_no)
+	JOIN dept_manager R2
+	ON R1.emp_no =R2.emp_no AND R1.dept_no != R2.dept_no;
+Output:
+	Empty set (0.00 sec)
+
+10. SELECT DISTINCT CONCAT(first_name, ' ', last_name) AS fullname
+	FROM employees JOIN salaries
+	ON employees.emp_no = salaries.emp_no
+	WHERE salary > 100000;
+Output:
+	| Akhilish Zobel              |
+	| Feipei Setlzner             |
+	| Saniya Hettesheimer         |
+	| Foong Godskesen             |
+	| Lihong Pusterhofer          |
+	| Akeel Baez                  |
+	| Armond Fraisse              |
+	| Christoph Schneeberger      |
+	| Mong Usdin                  |
+	| Aloke Wuwongse              |
+	| Masako Angiulli             |
+	| Christ Murtagh              |
+	| Youpyo Perfilyeva           |
+	| Leszek Pulkowski            |
+	| Danai Hedayat               |
+	| Guozhong Felder             |
+	| Gino Usery                  |
+	| Nathan Ranta                |
+	| Bangqing Kleiser            |
+	+-----------------------------+
+	18925 rows in set (2.63 sec)
+
+11. SELECT DISTINCT dept_name
+	FROM (dept_emp JOIN salaries ON dept_emp.emp_no = salaries.emp_no)
+	JOIN departments
+	ON dept_emp.dept_no = departments.dept_no
+	WHERE salary > 100000;
+Output: 
+	+--------------------+
+	| dept_name          |
+	+--------------------+
+	| Customer Service   |
+	| Development        |
+	| Finance            |
+	| Human Resources    |
+	| Marketing          |
+	| Production         |
+	| Quality Management |
+	| Research           |
+	| Sales              |
+	+--------------------+
+	9 rows in set (0.02 sec)
