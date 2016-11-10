@@ -90,11 +90,11 @@ Output:
 	9 rows in set (0.01 sec)
 
 5. SELECT CONCAT(first_name, ' ', last_name) AS fullname
-	FROM departments R1 JOIN dept_emp R2 
-	ON R1.dept_no = R2.dept_no
-	JOIN employees R3
-	ON R2.emp_no = R3.emp_no
-	WHERE R1.`dept_name` = 'Sales';
+	FROM departments JOIN dept_emp 
+	ON departments.dept_no = dept_emp.dept_no
+	JOIN employees
+	ON dept_emp.emp_no = employees.emp_no
+	WHERE departments.`dept_name` = 'Sales';
 Output:
 	| Morris Smeets                 |
 	| Fumiko Luke                   |
@@ -121,11 +121,11 @@ Output:
 	52245 rows in set (1.34 sec)
 
 6. SELECT CONCAT(first_name, ' ', last_name) AS fullname
-	FROM departments R1 JOIN dept_emp R2 
-	ON R1.dept_no = R2.dept_no
-	JOIN employees R3
-	ON R2.emp_no = R3.emp_no
-	WHERE R1.dept_name = 'Finance' and R3.gender = 'M';
+	FROM departments JOIN dept_emp 
+	ON departments.dept_no = dept_emp.dept_no
+	JOIN employees
+	ON dept_emp.emp_no = employees.emp_no
+	WHERE departments.dept_name = 'Finance' and employees.gender = 'M';
 Output:
 	| Bodo Rosay                   |
 	| Subhada Schaft               |
@@ -152,11 +152,11 @@ Output:
 	10331 rows in set (0.35 sec)
 
 7. SELECT CONCAT(first_name, ' ', last_name) AS fullname
-	FROM departments R1 JOIN dept_emp R2 
-	ON R1.dept_no = R2.dept_no
-	JOIN employees R3
-	ON R2.emp_no = R3.emp_no
-	WHERE R1.dept_name = 'Marketing' and R3.gender = 'F';
+	FROM departments JOIN dept_emp 
+	ON departments.dept_no = dept_emp.dept_no
+	JOIN employees
+	ON dept_emp.emp_no = employees.emp_no
+	WHERE departments.dept_name = 'Marketing' and employees.gender = 'F';
 Output:
 	| Abdelkader Ghazalie         |
 	| Zhensheng Ranai             |
