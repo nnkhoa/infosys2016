@@ -1,10 +1,13 @@
-1. First add the new departments
+1. Add the new departments
 	INSERT INTO departments VALUES ('d010','Research and Development');
 	Output:
 		Query OK, 1 row affected (0,00 sec)
 	INSERT INTO departments VALUES ('d011','Marketing and Sale');
 	Output:
 		Query OK, 1 row affected (0,00 sec)
+Explaination: 	Add these 2 new rows first so that the other tables that are using 
+				attributes in this table as their foreign keys will have something
+				to reference.
 
 2. Update tables with these new values
 	- update dept_emp table
@@ -27,6 +30,10 @@
 		DELETE FROM dept_emp WHERE dept_no = 'd007';
 		Output:
 			Query OK, 3652 rows affected (0,08 sec)
+
+		Explaination: 	UPDATE IGNORE will update rows that meet the condition (here, rows that have old department number)
+						if there are duplicate rows, the duplicated rows are ignored (unchange) 
+						then, delete rows that still have old department numbers	
 	- update dept_manager table
 		UPDATE dept_manager SET dept_no = 'd010' 
 		WHERE dept_no = 'd005' OR dept_no = 'd008';	
@@ -40,10 +47,14 @@
 			Query OK, 4 rows affected (0,00 sec)
 			Rows matched: 4  Changed: 4  Warnings: 0
 
+		Explaination:	Change the manager department numbers, since there was no manager that holds 2 departments
+						the UPDATE IGNORE is not needed	
 
 3. delete the old values from the departments table
 	DELETE FROM departments WHERE dept_no = 'd001' OR dept_no = 'd005' OR dept_no = 'd007' OR dept_no = 'd008';
 	Output:
 		Query OK, 4 rows affected (0,01 sec)
+
+	Explaination: 	wipe the rows that has no entry
 
 
