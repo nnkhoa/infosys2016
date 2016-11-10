@@ -1,0 +1,49 @@
+1. First add the new departments
+	INSERT INTO departments VALUES ('d010','Research and Development');
+	Output:
+		Query OK, 1 row affected (0,00 sec)
+	INSERT INTO departments VALUES ('d011','Marketing and Sale');
+	Output:
+		Query OK, 1 row affected (0,00 sec)
+
+2. Update tables with these new values
+	- update dept_emp table
+		UPDATE IGNORE dept_emp SET dept_no = 'd010' 
+		WHERE dept_no = 'd005' OR dept_no = 'd008';
+		Output:
+			Query OK, 101599 rows affected, 5234 warnings (7,26 sec)
+			Rows matched: 106833  Changed: 101599  Warnings: 5234
+
+		DELETE FROM dept_emp WHERE dept_no = 'd008';
+		Output:
+			Query OK, 5234 rows affected (0,08 sec)
+
+		UPDATE dept_emp SET dept_no = 'd011' 
+		WHERE dept_no = 'd001' OR dept_no = 'd007';
+		Output:
+			Query OK, 68804 rows affected, 3652 warnings (2,97 sec)
+			Rows matched: 72456  Changed: 68804  Warnings: 3652
+		
+		DELETE FROM dept_emp WHERE dept_no = 'd007';
+		Output:
+			Query OK, 3652 rows affected (0,08 sec)
+	- update dept_manager table
+		UPDATE dept_manager SET dept_no = 'd010' 
+		WHERE dept_no = 'd005' OR dept_no = 'd008';	
+		Output:
+			Query OK, 4 rows affected (0,01 sec)
+			Rows matched: 4  Changed: 4  Warnings: 0
+
+		UPDATE dept_manager SET dept_no = 'd011' 
+		WHERE dept_no = 'd001' OR dept_no = 'd007';
+		Output:
+			Query OK, 4 rows affected (0,00 sec)
+			Rows matched: 4  Changed: 4  Warnings: 0
+
+
+3. delete the old values from the departments table
+	DELETE FROM departments WHERE dept_no = 'd001' OR dept_no = 'd005' OR dept_no = 'd007' OR dept_no = 'd008';
+	Output:
+		Query OK, 4 rows affected (0,01 sec)
+
+
