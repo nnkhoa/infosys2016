@@ -151,36 +151,38 @@ Output:
 	+------------------------------+
 	10331 rows in set (0.35 sec)
 
-7. SELECT CONCAT(first_name, ' ', last_name) AS fullname
+7. SELECT salary
 	FROM departments JOIN dept_emp 
 	ON departments.dept_no = dept_emp.dept_no
+	JOIN salaries
+	ON dept_emp.emp_no = salaries.emp_no
 	JOIN employees
-	ON dept_emp.emp_no = employees.emp_no
+	ON employees.emp_no = salaries.emp_no
 	WHERE departments.dept_name = 'Marketing' and employees.gender = 'F';
 Output:
-	| Abdelkader Ghazalie         |
-	| Zhensheng Ranai             |
-	| Ranga Bahr                  |
-	| Danai Vigier                |
-	| Zeljko Cromarty             |
-	| Hirochika Koprowski         |
-	| Heeju Buescher              |
-	| Ger Nollmann                |
-	| Alper Peck                  |
-	| Xiaoshan Sigstam            |
-	| Luerbio Leaver              |
-	| Breannda Gajiwala           |
-	| Vesna Attimonelli           |
-	| Kinh Sommer                 |
-	| Turgut Levasseur            |
-	| Gopalakrishnan Maierhofer   |
-	| Moriyoshi Pusterhofer       |
-	| JiYoung Coney               |
-	| Adhemar Gist                |
-	| Tonia Butner                |
-	| Siamak Salverda             |
-	+-----------------------------+
-	8037 rows in set (0.74 sec)
+	|  69557 |
+	|  73008 |
+	|  75462 |
+	|  76837 |
+	|  43005 |
+	|  47320 |
+	|  50713 |
+	|  52539 |
+	|  56516 |
+	|  59357 |
+	|  63601 |
+	|  64778 |
+	|  65475 |
+	|  69488 |
+	|  72212 |
+	|  71874 |
+	|  73574 |
+	|  76708 |
+	|  79327 |
+	|  80389 |
+	+--------+
+	74996 rows in set (0,16 sec)
+
 
 8. SELECT CONCAT(R1.first_name, ' ', R1.last_name) AS fullname
 	FROM (employees R1 JOIN dept_emp ON R1.emp_no = dept_emp.emp_no)
