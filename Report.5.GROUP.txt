@@ -1,0 +1,137 @@
+1. SELECT emp_no, AVG(salary) as Average
+	FROM salaries
+	GROUP BY emp_no;
+
+Example Output:
+
+| 499980 |  99940.8333 |
+| 499981 |  53637.1667 |
+| 499982 |  39829.5000 |
+| 499983 |  46269.7500 |
+| 499984 |  54431.2143 |
+| 499985 |  43500.6667 |
+| 499986 | 105961.7059 |
+| 499987 |  54279.6667 |
+| 499988 |  86700.7143 |
+| 499989 |  68260.4000 |
+| 499990 |  43325.0000 |
+| 499991 |  47829.5000 |
+| 499992 |  64179.7500 |
+| 499993 |  40944.6667 |
+| 499994 |  40000.0000 |
+| 499995 |  45891.6667 |
+| 499996 |  63134.1429 |
+| 499997 |  66475.8667 |
+| 499998 |  46665.5556 |
+| 499999 |  70625.0000 |
++--------+-------------+
+300024 rows in set (1,60 sec)
+
+2. SELECT emp_no, SUM(salary) as Total
+	FROM salaries
+	GROUP BY emp_no;
+
+Example Output:
+
+| 499980 | 1199290 |
+| 499981 |  643646 |
+| 499982 |   79659 |
+| 499983 |  370158 |
+| 499984 |  762037 |
+| 499985 |  261004 |
+| 499986 | 1801349 |
+| 499987 |  162839 |
+| 499988 | 1213810 |
+| 499989 |  341302 |
+| 499990 |  129975 |
+| 499991 |  286977 |
+| 499992 | 1026876 |
+| 499993 |  245668 |
+| 499994 |   40000 |
+| 499995 |  275350 |
+| 499996 |  441939 |
+| 499997 |  997138 |
+| 499998 |  419990 |
+| 499999 |  353125 |
++--------+---------+
+300024 rows in set (1,22 sec)
+
+3. SELECT dept_no, MIN(salary) AS Minimum, MAX(salary) AS Maximum, SUM(salary) AS Total
+	FROM dept_emp JOIN salaries
+	ON dept_emp.emp_no = salaries.emp_no
+	GROUP BY dept_no;
+
+Output:
+
++---------+---------+---------+-------------+
+| dept_no | Minimum | Maximum | Total       |
++---------+---------+---------+-------------+
+| d002    |   38812 |  142395 | 11650834677 |
+| d003    |   38735 |  141953 |  9363811425 |
+| d004    |   38623 |  138273 | 41554438942 |
+| d006    |   38786 |  132103 | 10865203635 |
+| d009    |   38836 |  144866 | 13143639841 |
+| d010    |   38849 |  144434 | 57200885924 |
+| d011    |   39127 |  158220 | 51054820927 |
++---------+---------+---------+-------------+
+7 rows in set (2,19 sec)
+
+4. SELECT dept_no, SUM(salary) AS Total
+	FROM dept_emp JOIN salaries
+	ON dept_emp.emp_no = salaries.emp_no
+	GROUP BY dept_no HAVING Total > 20000000000;
+
+Output:
+
++---------+-------------+
+| dept_no | Total       |
++---------+-------------+
+| d004    | 41554438942 |
+| d010    | 57200885924 |
+| d011    | 51054820927 |
++---------+-------------+
+3 rows in set (1,60 sec)
+
+5. SELECT dept_no, SUM(salary) AS Male_Total
+	FROM dept_emp JOIN salaries
+	ON dept_emp.emp_no = salaries.emp_no
+	JOIN employees
+	ON salaries.emp_no = employees.emp_no 
+	WHERE employees.gender = 'M'
+	GROUP BY dept_no;
+
+Output:
+
++---------+-------------+
+| dept_no | Male_Total  |
++---------+-------------+
+| d002    |  6940675318 |
+| d003    |  5619533959 |
+| d004    | 24873889749 |
+| d006    |  6472073211 |
+| d009    |  7865587983 |
+| d010    | 34387010200 |
+| d011    | 30754859529 |
++---------+-------------+
+7 rows in set (2,37 sec)
+
+6. SELECT dept_no, SUM(salary) AS Manager_Total
+	FROM dept_manager JOIN salaries
+	ON dept_manager.emp_no = salaries.emp_no
+	GROUP BY dept_no
+	ORDER BY Manager_Total DESC;
+
+Output:
+
++---------+---------------+
+| dept_no | Manager_Total |
++---------+---------------+
+| d011    |       6008127 |
+| d010    |       4587037 |
+| d006    |       4162118 |
+| d004    |       3374004 |
+| d009    |       3187661 |
+| d002    |       2549372 |
+| d003    |       2098298 |
++---------+---------------+
+7 rows in set (0,01 sec)
