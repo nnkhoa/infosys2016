@@ -127,6 +127,7 @@ FROM
 	(SELECT titles.title, salaries.salary
 	FROM titles JOIN salaries
 	ON titles.emp_no = salaries.emp_no) AS titles_emp
+WHERE title LIKE '%Engineer%'
 GROUP BY title
 ORDER BY Average DESC;
 
@@ -134,12 +135,8 @@ Output:
 +--------------------+------------+
 | title              | Average    |
 +--------------------+------------+
-| Senior Staff       | 70470.8353 |
-| Staff              | 69309.1023 |
-| Manager            | 66924.2706 |
 | Senior Engineer    | 60543.2191 |
 | Engineer           | 59508.0397 |
 | Assistant Engineer | 59304.9863 |
-| Technique Leader   | 59294.3742 |
 +--------------------+------------+
-7 rows in set (4,72 sec)
+3 rows in set (2,59 sec)
