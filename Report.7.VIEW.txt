@@ -1,0 +1,169 @@
+1. Who have the same name as the managers of the “Finance”
+department?
+
+CREATE OR REPLACE VIEW Manager_Finance AS
+	SELECT employees.emp_no, employees.first_name, employees.last_name 
+	FROM employees 
+	JOIN dept_manager ON employees.emp_no = dept_manager.emp_no
+	JOIN departments ON dept_manager.dept_no = departments.dept_no
+	WHERE departments.dept_name = 'Finance';
+
+Output:
+	Query OK, 0 rows affected (0,01 sec)
+
+SELECT CONCAT(first_name, ' ', last_name) AS fullname
+	FROM employees
+	WHERE last_name IN (SELECT last_name FROM Manager_Finance)
+	AND emp_no NOT IN (SELECT emp_no FROM Manager_Finance);
+
+Output:
+| Persi Legleitner        |
+| Ronghao Alpin           |
+| Ayakannu Legleitner     |
+| Heejo Alpin             |
+| Duangkaew Legleitner    |
+| Shirish Legleitner      |
+| Arvind Alpin            |
+| Shaw Alpin              |
+| Qiwen Alpin             |
+| Kristine Alpin          |
+| Conrado Alpin           |
+| Uri Legleitner          |
+| Danil Alpin             |
+| Constantijn Legleitner  |
+| Anoosh Legleitner       |
+| Aiichiro Legleitner     |
+| Gift Legleitner         |
+| Xinan Legleitner        |
+| Gilbert Alpin           |
+| Ramalingam Alpin        |
+| Ekawit Alpin            |
+| Hilary Legleitner       |
+| Geoffry Alpin           |
+| Heping Alpin            |
+| Hidde Alpin             |
++-------------------------+
+406 rows in set (0,29 sec)
+
+
+2. Who in the “Production” department were hired after the
+promotion of the last manager in that department?
+
+CREATE OR REPLACE VIEW Manager_Production AS
+	SELECT dept_manager.emp_no, from_date
+	FROM dept_manager JOIN departments ON dept_manager.dept_no = departments.dept_no
+	WHERE departments.dept_name = 'Production';
+Output:
+	Query OK, 0 rows affected (0,00 sec)
+
+CREATE OR REPLACE VIEW Employee_Production AS
+	SELECT CONCAT(first_name, ' ', last_name) AS fullname, hire_date
+	FROM employees JOIN dept_emp ON employees.emp_no = dept_emp.emp_no
+	JOIN departments ON dept_emp.dept_no = departments.dept_no
+	WHERE departments.dept_name = 'Production';
+Output:
+	Query OK, 0 rows affected (0,01 sec)
+
+SELECT fullname 
+FROM Employee_Production
+WHERE hire_date > (SELECT MAX(from_date) FROM Manager_Production);
+Output:
+
+| Taisook Strooper           |
+| Woody Brlek                |
+| Jaques Pauthner            |
+| Mitsuyuki Varman           |
+| Urs Sewelson               |
+| Chenye Luca                |
+| Otilia Driscoll            |
+| Ranan Perfilyeva           |
+| Sahrah Camurati            |
+| Subhrajyoti Rosay          |
+| Ronnie Chorvat             |
+| Paris Levergood            |
+| Hitofumi Bernardeschi      |
+| Mats McClurg               |
+| Martine Landherr           |
+| Jaihie Suwa                |
+| Aria Millington            |
+| Paddy Serdy                |
+| Uzi Ravishankar            |
+| Shrikanth Luiz             |
+| Mohan England              |
+| Ziva Veevers               |
+| Ortrun Delaune             |
+| Reuven Avouris             |
+| Arun Rajaraman             |
+| Yoshinari Theuretzbacher   |
+| Florina Cusworth           |
+| DeForest Mullainathan      |
+| Sachin Tsukuda             |
++----------------------------+
+3758 rows in set (0,15 sec)
+
+3. Find the average salary of each department, from highest to
+lowest
+
+CREATE OR REPLACE VIEW Employee_AVG_Salary AS
+	SELECT dept_emp.emp_no, AVG(salary) AS emp_salary
+	FROM dept_emp JOIN salaries ON dept_emp.emp_no = salaries.emp_no
+	GROUP BY salaries.emp_no;
+Output: 
+	Query OK, 0 rows affected (0,01 sec)
+
+SELECT dept_name, AVG(emp_salary) AS Average
+FROM departments JOIN dept_emp ON departments.dept_no = dept_emp.dept_no
+JOIN Employee_AVG_Salary
+ON dept_emp.emp_no = Employee_AVG_Salary.emp_no
+GROUP BY dept_name
+ORDER BY Average DESC;	
+Output:
+
++--------------------+----------------+
+| dept_name          | Average        |
++--------------------+----------------+
+| Sales              | 78313.22247361 |
+| Marketing          | 69541.61771136 |
+| Finance            | 68061.43501801 |
+| Research           | 57322.03105659 |
+| Production         | 57253.31382027 |
+| Development        | 57152.20845497 |
+| Customer Service   | 56480.08591880 |
+| Quality Management | 54892.93507273 |
+| Human Resources    | 53214.29085744 |
++--------------------+----------------+
+9 rows in set (9,98 sec)
+
+4. Find the average salary of each job title, from highest to
+lowest.
+
+CREATE OR REPLACE VIEW Salary_By_Title AS
+	SELECT titles.title, salaries.salary
+	FROM titles JOIN salaries
+	ON titles.emp_no = salaries.emp_no;
+Output:
+	Query OK, 0 rows affected (0,02 sec)
+
+SELECT title, AVG(salary) as Average
+FROM Salary_By_Title
+WHERE title LIKE '%Engineer%'
+GROUP BY title
+ORDER BY Average DESC;
+Output:
+
++--------------------+------------+
+| title              | Average    |
++--------------------+------------+
+| Senior Engineer    | 60543.2191 |
+| Engineer           | 59508.0397 |
+| Assistant Engineer | 59304.9863 |
++--------------------+------------+
+3 rows in set (2,81 sec)
+
+
+
+
+
+
+
+
