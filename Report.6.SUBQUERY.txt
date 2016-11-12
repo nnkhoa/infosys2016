@@ -55,43 +55,42 @@ Output:
 promotion of the last manager in that department?
 
 SELECT CONCAT(first_name, ' ', last_name) AS fullname
-FROM employees
+FROM employees JOIN dept_emp ON employees.emp_no = dept_emp.emp_no
+JOIN departments ON dept_emp.dept_no = departments.dept_no
 WHERE hire_date > 
 	(SELECT MAX(from_date) as Latest
 	FROM dept_manager JOIN departments ON dept_manager.dept_no = departments.dept_no
-	WHERE departments.dept_name = 'Production');
-
+	WHERE departments.dept_name = 'Production')
+AND departments.dept_name = 'Production';
 Output:
 
-| Ulf Edelhoff                 |
-| Hideyuki Delgrande           |
-| Honglan Picaronny            |
-| Basim Bodoff                 |
-| Arlette Dolinsky             |
-| Mario Zschoche               |
-| Khoa Stanfel                 |
-| Kiyokazu Vernadat            |
-| Juichirou Shigei             |
-| Arun Rajaraman               |
-| Heping Heydon                |
-| Lakshmi Polajnar             |
-| Susanne Matteis              |
-| Nadjib McAffer               |
-| Yoshinari Theuretzbacher     |
-| Subhash Barriga              |
-| Jagoda Lanphier              |
-| Kannan Varley                |
-| Hilari Smeets                |
-| Florina Cusworth             |
-| Angus Swan                   |
-| Feiyu Sanella                |
-| Martial Weisert              |
-| Gila Lukaszewicz             |
-| Rimli Dusink                 |
-| DeForest Mullainathan        |
-| Sachin Tsukuda               |
-+------------------------------+
-15291 rows in set (0,11 sec)
+| Chenye Luca                |
+| Otilia Driscoll            |
+| Ranan Perfilyeva           |
+| Sahrah Camurati            |
+| Subhrajyoti Rosay          |
+| Ronnie Chorvat             |
+| Paris Levergood            |
+| Hitofumi Bernardeschi      |
+| Mats McClurg               |
+| Martine Landherr           |
+| Jaihie Suwa                |
+| Aria Millington            |
+| Paddy Serdy                |
+| Uzi Ravishankar            |
+| Shrikanth Luiz             |
+| Mohan England              |
+| Ziva Veevers               |
+| Ortrun Delaune             |
+| Reuven Avouris             |
+| Arun Rajaraman             |
+| Yoshinari Theuretzbacher   |
+| Florina Cusworth           |
+| DeForest Mullainathan      |
+| Sachin Tsukuda             |
++----------------------------+
+3758 rows in set (0,25 sec)
+
 
 3. Find the average salary of each department, from highest to
 lowest
