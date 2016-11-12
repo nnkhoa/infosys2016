@@ -95,29 +95,31 @@ Output:
 3. Find the average salary of each department, from highest to
 lowest
 
-SELECT dept_name, AVG(salary) as Average
-FROM departments JOIN 
-	(SELECT dept_no, salary
-	FROM dept_emp JOIN salaries ON dept_emp.emp_no = salaries.emp_no) AS dept_salary
-ON departments.dept_no = dept_salary.dept_no
+SELECT dept_name, AVG(emp_salary) AS Average
+FROM departments JOIN dept_emp ON departments.dept_no = dept_emp.dept_no
+JOIN
+	(SELECT dept_emp.emp_no, AVG(salary) AS emp_salary
+	FROM dept_emp JOIN salaries ON dept_emp.emp_no = salaries.emp_no
+	GROUP BY salaries.emp_no) AS dept_salary
+ON dept_emp.emp_no = dept_salary.emp_no
 GROUP BY dept_name
 ORDER BY Average DESC;
 
 Output:
-+--------------------+------------+
-| dept_name          | Average    |
-+--------------------+------------+
-| Sales              | 80667.6058 |
-| Marketing          | 71913.2000 |
-| Finance            | 70489.3649 |
-| Research           | 59665.1817 |
-| Production         | 59605.4825 |
-| Development        | 59478.9012 |
-| Customer Service   | 58770.3665 |
-| Quality Management | 57251.2719 |
-| Human Resources    | 55574.8794 |
-+--------------------+------------+
-9 rows in set (2,42 sec)
++--------------------+----------------+
+| dept_name          | Average        |
++--------------------+----------------+
+| Sales              | 78313.22247361 |
+| Marketing          | 69541.61771136 |
+| Finance            | 68061.43501801 |
+| Research           | 57322.03105659 |
+| Production         | 57253.31382027 |
+| Development        | 57152.20845497 |
+| Customer Service   | 56480.08591880 |
+| Quality Management | 54892.93507273 |
+| Human Resources    | 53214.29085744 |
++--------------------+----------------+
+9 rows in set (9,44 sec)
 
 4. Find the average salary of each job title, from highest to
 lowest.
