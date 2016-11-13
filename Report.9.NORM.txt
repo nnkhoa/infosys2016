@@ -1,0 +1,44 @@
+1. Employees table has the form of 3NF
+2. Reason: 
+	- Everthing on each table depends only on the their primary key.
+	- There is duplicated column
+3. Normalizing the Order form to 3NF
+
+	- The Order table is there to store basic info of the order: id, when, who made the order
+	- The Customer table contains info of customers
+	- The Product table stores details of product
+	- Table Order_Detail is used to keep information of how many of which product in a particular order
+
++-------------+
+|Order		  |
++-------------+
+|Order_No(PK) |
+|Order_date   |
+|Customer_No  |
++-------------+
+
++----------------+
+|Customer 		 |
++----------------+
+|Customer_No(PK) |
+|Customer_Name   |
+|Customer_Phone  |
+|Customer_Address|
+|City 			 |
++----------------+
+
++----------------+
+|Product 		 |
++----------------+
+|Product_ID (PK) |
+|Product_detail  |
+|Price			 |
++----------------+
+
++--------------+
+|Order_Detail  |
++--------------+
+|Order_No(PK)  |
+|Product_ID(PK)|
+|Quantity      |
++--------------+
