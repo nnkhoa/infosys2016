@@ -1,0 +1,138 @@
+1. Determine concepts
+	- magazines
+	- articles
+	- authors
+
+2. Determine attribute
+	- magazines
+		+ Title
+		+ ISSN No.
+		+ Volume No.
+		+ Year
+	- articles
+		+ Title
+		+ Page_begin
+		+ Page_end
+	- authors
+		+ first_name
+		+ last_name
+		+ e-mail
+		+ ascription
+
+3. Determine links
+	- 1 magazine can have many articles while 1 article can be long to only one magazine
+	- 1 articles can have many authors while 1 authors can publish many articles
+
+4. Determine types of each concept attribute
+	- magazines
+		+ Title: VARCHAR(50)
+		+ ISSN No.: VARCHAR(15)
+		+ Volume No.: SMALLINT
+		+ Year: YEAR
+	- articles
+		+ Title: VARCHAR(100)
+		+ Page_begin: SMALLINT
+		+ Page_end: SMALLINT
+	- authors
+		+ first_name: VARCHAR(30)
+		+ last_name: VARCHAR(30)
+		+ e-mail: VARCHAR(50)
+		+ ascription: TEXT
+
+5. Solve foriegn key links
+	- Primary Key
+		+ magazine: ISSN
+		+ articles: add new attribute art_ID: INT
+		+ authors: add new attribute aut_ID: INT
+	- Add foreign key for 1-many link
+		+ articles: add foreign key magazine.ISSN
+	- Add table for many-many link
+		+ add table article_author with attributes:
+			-> article.art_ID
+			-> author.aut_ID
+
+6. Implementation
+
+CREATE DATABASE magazines;
+
+USE magazines;
+
+CREATE TABLE magazines(
+	ISSN 		VARCHAR(15) 	NOT NULL,
+	title 		VARCHAR(50) 	NOT NULL,
+	vol_no		SMALLINT		NOT NULL,
+	year 		YEAR,
+	PRIMARY KEY (ISSN)			
+);
+
+CREATE TABLE articles(
+	art_ID		INT 			NOT NULL 	AUTO_INCREMENT,
+	ISSN		VARCHAR(15)		NOT NULL,
+	title 		VARCHAR(100)	NOT NULL,
+	page_begin 	SMALLINT		NOT NULL,
+	page_end 	SMALLINT		NOT NULL,
+	PRIMARY KEY (art_ID),
+	FOREIGN KEY (ISSN) REFERENCES magazines(ISSN)
+);
+
+CREATE TABLE authors(
+	aut_ID		INT 			NOT NULL	AUTO_INCREMENT,
+	first_name	VARCHAR(30)		NOT NULL,
+	last_name	VARCHAR(30)		NOT NULL,
+	e_mail		VARCHAR(100)	NOT NULL,
+	ascription	TEXT,
+	PRIMARY KEY (aut_ID)	
+);
+
+CREATE TABLE article_author(
+	art_ID		INT 			NOT NULL,
+	aut_ID		INT 			NOT NULL,
+	FOREIGN KEY (art_ID) REFERENCES articles(art_ID),
+	FOREIGN KEY (aut_ID) REFERENCES author(aut_ID),
+
+);
+
+7. Describe database			
+	- describe magazines;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| ISSN   | varchar(15) | NO   | PRI | NULL    |       |
+| title  | varchar(50) | NO   |     | NULL    |       |
+| vol_no | smallint(6) | NO   |     | NULL    |       |
+| year   | year(4)     | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+4 rows in set (0,00 sec)
+
+	- describe articles
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| art_ID     | int(11)      | NO   | PRI | NULL    | auto_increment |
+| ISSN       | varchar(15)  | NO   | MUL | NULL    |                |
+| title      | varchar(100) | NO   |     | NULL    |                |
+| page_begin | smallint(6)  | NO   |     | NULL    |                |
+| page_end   | smallint(6)  | NO   |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+5 rows in set (0,00 sec)
+
+	- describe authors
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| aut_ID     | int(11)      | NO   | PRI | NULL    | auto_increment |
+| first_name | varchar(30)  | NO   |     | NULL    |                |
+| last_name  | varchar(30)  | NO   |     | NULL    |                |
+| e_mail     | varchar(100) | NO   |     | NULL    |                |
+| ascription | text         | YES  |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+5 rows in set (0,00 sec)
+
+	- describe article_author
++--------+---------+------+-----+---------+-------+
+| Field  | Type    | Null | Key | Default | Extra |
++--------+---------+------+-----+---------+-------+
+| art_ID | int(11) | NO   | MUL | NULL    |       |
+| aut_ID | int(11) | NO   | MUL | NULL    |       |
++--------+---------+------+-----+---------+-------+
+2 rows in set (0,00 sec)
