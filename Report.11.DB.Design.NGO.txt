@@ -1,0 +1,205 @@
+1. Determine concepts
+	- office
+	- project
+	- city_country
+	- person
+	- action
+
+2. Determine attribute
+	- office
+		+ address
+		+ phone_no
+	- project
+		+ code
+		+ title
+		+ begin_date
+		+ end_date
+		+ budget
+	- city_country
+		+ city
+		+ country
+		+ inhabitants
+	- person
+		+ name
+	- action
+		+ name
+
+
+3. Determine links
+	- 1 office can only be in one city, 1 city can only have 1 office
+	- 1 office can have many projects while 1 project can be long to only 1 office
+	- 1 project can only have 1 person in charge, 1 person can be in charged of many projects
+	- 1 project can have many actions, 1 action can be in many projects
+	- 1 action can affect many cities, 1 city can be affected by many actions
+	- 1 person can be director of 1 office, and 1 office can only have 1 director
+
+4. Determine types of each concept attribute
+	- office
+		+ city: VARCHAR(50)
+		+ address: VARCHAR(200)
+		+ phone_no: VARCHAR(15)
+	- project
+		+ code: VARCHAR(5)
+		+ title: VARCHAR(50)
+		+ begin_date: DATE
+		+ end_date: DATE
+		+ budget: BIGINT UNSIGNED
+	- city_country
+		+ city: VARCHAR(50)
+		+ country: VARCHAR(50)
+		+ inhabitants: BIGINT UNSIGNED
+	- person
+		+ name: VARCHAR(50)
+	- action
+		+ name: VARCHAR(50)	
+
+5. Solve foriegn key links
+	- Primary Key
+		+ office: add new attribute off_ID: INT
+		+ project: code
+		+ city: city
+		+ person: add new attribute per_ID: INT
+		+ action: add new attribute act_ID: INT
+	- Add foreign key for 1-many link
+		+ office: add foreign key person.per_ID
+		+ project: add foreign key person.per_ID
+	- Add table for many-many link
+		+ add table acton_affect_city with these attributes:
+			-> action.act_ID
+			-> city.city
+		+ add table project_action
+			-> action.act_ID
+			-> project.code
+6. Implementation
+
+CREATE DATABASE NGO;
+
+USE NGO;
+
+CREATE TABLE person(
+	per_ID		INT 			NOT NULL 		AUTO_INCREMENT,
+	name		VARCHAR(50)		NOT NULL,
+	PRIMARY KEY(per_ID)
+);
+
+CREATE TABLE city_country(
+	city 		VARCHAR(50)		NOT NULL,
+	country 	VARCHAR(50)		NOT NULL,
+	inhabitants	BIGINT UNSIGNED NOT NULL,
+	PRIMARY KEY(city)
+);
+
+CREATE TABLE office(
+	off_ID		INT 			NOT NULL 		AUTO_INCREMENT,
+	city 		VARCHAR(50)		NOT NULL,
+	address		VARCHAR(200)	NOT NULL,
+	phone_no	VARCHAR(15)		NOT NULL,
+	director	INT				NOT NULL,
+	PRIMARY KEY(off_ID),
+	FOREIGN KEY (director) REFERENCES person(per_ID),
+	FOREIGN KEY (city) REFERENCES city_country(city)
+);
+
+
+CREATE TABLE project(
+	code		VARCHAR(5)		NOT NULL,
+	title		VARCHAR(50)		NOT NULL,
+	begin_date 	DATE 			NOT NULL,
+	end_date 	DATE 			NOT NULL,
+	budget		BIGINT UNSIGNED	NOT NULL,
+	manager		INT 			NOT NULL,
+	PRIMARY KEY(code),
+	FOREIGN KEY (manager) REFERENCES person(per_ID)
+);
+
+CREATE TABLE action(
+	act_ID 		INT 			NOT NULL 		AUTO_INCREMENT,
+	name		VARCHAR(50) 	NOT NULL,
+	PRIMARY KEY(act_ID)
+);
+
+CREATE TABLE action_affect_city(
+	act_ID 		INT 			NOT NULL,
+	city 		VARCHAR(50) 	NOT	NULL,
+	FOREIGN KEY (act_ID) REFERENCES action(act_ID),
+	FOREIGN KEY (city) REFERENCES city_country(city)	
+);
+
+CREATE TABLE project_action(
+	act_ID 		INT 			NOT NULL,
+	pj_code 	VARCHAR(5) 		NOT	NULL,
+	FOREIGN KEY (act_ID) REFERENCES action(act_ID),
+	FOREIGN KEY (pj_code) REFERENCES project(code)	
+);
+
+7. Describe Database
+	- describe person;
++--------+-------------+------+-----+---------+----------------+
+| Field  | Type        | Null | Key | Default | Extra          |
++--------+-------------+------+-----+---------+----------------+
+| per_ID | int(11)     | NO   | PRI | NULL    | auto_increment |
+| name   | varchar(50) | NO   |     | NULL    |                |
++--------+-------------+------+-----+---------+----------------+
+2 rows in set (0,00 sec)
+
+	- describe city_country;
++-------------+---------------------+------+-----+---------+-------+
+| Field       | Type                | Null | Key | Default | Extra |
++-------------+---------------------+------+-----+---------+-------+
+| city        | varchar(50)         | NO   | PRI | NULL    |       |
+| country     | varchar(50)         | NO   |     | NULL    |       |
+| inhabitants | bigint(20) unsigned | NO   |     | NULL    |       |
++-------------+---------------------+------+-----+---------+-------+
+3 rows in set (0,01 sec)
+
+	- describe office;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| off_ID   | int(11)      | NO   | PRI | NULL    | auto_increment |
+| city     | varchar(50)  | NO   | MUL | NULL    |                |
+| address  | varchar(200) | NO   |     | NULL    |                |
+| phone_no | varchar(15)  | NO   |     | NULL    |                |
+| director | int(11)      | NO   | MUL | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+5 rows in set (0,00 sec)
+
+	- describe project;
++------------+---------------------+------+-----+---------+-------+
+| Field      | Type                | Null | Key | Default | Extra |
++------------+---------------------+------+-----+---------+-------+
+| code       | varchar(5)          | NO   | PRI | NULL    |       |
+| title      | varchar(50)         | NO   |     | NULL    |       |
+| begin_date | date                | NO   |     | NULL    |       |
+| end_date   | date                | NO   |     | NULL    |       |
+| budget     | bigint(20) unsigned | NO   |     | NULL    |       |
+| manager    | int(11)             | NO   | MUL | NULL    |       |
++------------+---------------------+------+-----+---------+-------+
+6 rows in set (0,00 sec)
+
+	- describe action;
++--------+-------------+------+-----+---------+----------------+
+| Field  | Type        | Null | Key | Default | Extra          |
++--------+-------------+------+-----+---------+----------------+
+| act_ID | int(11)     | NO   | PRI | NULL    | auto_increment |
+| name   | varchar(50) | NO   |     | NULL    |                |
++--------+-------------+------+-----+---------+----------------+
+2 rows in set (0,00 sec)
+
+	- describe action_affect_city;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| act_ID | int(11)     | NO   | MUL | NULL    |       |
+| city   | varchar(50) | NO   | MUL | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+2 rows in set (0,00 sec)
+
+	- describe project_action;
++---------+------------+------+-----+---------+-------+
+| Field   | Type       | Null | Key | Default | Extra |
++---------+------------+------+-----+---------+-------+
+| act_ID  | int(11)    | NO   | MUL | NULL    |       |
+| pj_code | varchar(5) | NO   | MUL | NULL    |       |
++---------+------------+------+-----+---------+-------+
+2 rows in set (0,00 sec)
