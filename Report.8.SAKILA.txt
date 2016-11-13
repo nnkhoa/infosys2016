@@ -1,0 +1,205 @@
+1. List names of all the languages in the database (sorted
+alphabetically)?
+
+SELECT name FROM language ORDER BY name ASC;
+
++----------+
+| name     |
++----------+
+| English  |
+| French   |
+| German   |
+| Italian  |
+| Japanese |
+| Mandarin |
++----------+
+6 rows in set (0,00 sec)
+
+2. List full names of actors with "GER" in their last name,
+ordered by their first name
+
+SELECT CONCAT(first_name, ' ', last_name) AS fullname
+FROM actor
+WHERE last_name LIKE "%GER%"
+ORDER BY first_name;
+
++----------+
+| name     |
++----------+
+| English  |
+| French   |
+| German   |
+| Italian  |
+| Japanese |
+| Mandarin |
++----------+
+6 rows in set (0,00 sec)
+
+3. Find all the addresses where postal code starts with "57",
+and return addresses sorted.
+
+SELECT address
+FROM address
+WHERE postal_code LIKE "57%"
+ORDER BY address DESC;
+
++-----------------------------------+
+| address                           |
++-----------------------------------+
+| 869 Shikarpur Way                 |
+| 687 Alessandria Parkway           |
+| 431 Szkesfehrvr Avenue            |
+| 390 Wroclaw Way                   |
+| 231 Kaliningrad Place             |
+| 1697 Kowloon and New Kowloon Loop |
+| 1515 Korla Way                    |
+| 1309 Weifang Street               |
+| 1287 Xiangfan Boulevard           |
+| 1061 Ede Avenue                   |
+| 1029 Dzerzinsk Manor              |
++-----------------------------------+
+11 rows in set (0,00 sec)
+
+4. How many films involve a "DWARF" in their titles?
+
+SELECT COUNT(*) AS number
+FROM film
+WHERE title LIKE "%DWARF%";
+
++--------+
+| number |
++--------+
+|      2 |
++--------+
+1 row in set (0,00 sec)
+
+5, Find full names of actors who played in a film involving
+’WAR’ in title and longer than 2.5 hours, along with the
+title, run length and release year of the movie, sorted by the
+actors’ last names.
+
+SELECT CONCAT(first_name, ' ', last_name) AS fullname, title, length, release_year
+FROM actor JOIN film_actor ON actor.actor_id = film_actor.actor_id
+	JOIN film ON film_actor.film_id = film.film_id
+WHERE film.title LIKE "%WAR%" AND film.length > 150
+ORDER BY last_name;
+
++-------------------+---------------------+--------+--------------+
+| fullname          | title               | length | release_year |
++-------------------+---------------------+--------+--------------+
+| ANGELINA ASTAIRE  | WARDROBE PHANTOM    |    178 |         2006 |
+| KARL BERRY        | LEATHERNECKS DWARFS |    153 |         2006 |
+| SUSAN DAVIS       | LEATHERNECKS DWARFS |    153 |         2006 |
+| RIVER DEAN        | WARDROBE PHANTOM    |    178 |         2006 |
+| SPENCER DEPP      | LEATHERNECKS DWARFS |    153 |         2006 |
+| BOB FAWCETT       | LEATHERNECKS DWARFS |    153 |         2006 |
+| GREGORY GOODING   | WARDROBE PHANTOM    |    178 |         2006 |
+| ADAM GRANT        | GLADIATOR WESTWARD  |    173 |         2006 |
+| KIRK JOVOVICH     | WARDROBE PHANTOM    |    178 |         2006 |
+| KIRK JOVOVICH     | GLADIATOR WESTWARD  |    173 |         2006 |
+| JULIA MCQUEEN     | GLADIATOR WESTWARD  |    173 |         2006 |
+| PENELOPE MONROE   | LEATHERNECKS DWARFS |    153 |         2006 |
+| WARREN NOLTE      | WARDROBE PHANTOM    |    178 |         2006 |
+| JAYNE SILVERSTONE | GLADIATOR WESTWARD  |    173 |         2006 |
+| IAN TANDY         | GLADIATOR WESTWARD  |    173 |         2006 |
+| IAN TANDY         | LEATHERNECKS DWARFS |    153 |         2006 |
+| THORA TEMPLE      | WARDROBE PHANTOM    |    178 |         2006 |
+| WALTER TORN       | WARDROBE PHANTOM    |    178 |         2006 |
+| NICK WAHLBERG     | WARDROBE PHANTOM    |    178 |         2006 |
+| UMA WOOD          | LEATHERNECKS DWARFS |    153 |         2006 |
+| CAMERON ZELLWEGER | GLADIATOR WESTWARD  |    173 |         2006 |
++-------------------+---------------------+--------+--------------+
+21 rows in set (0,00 sec)
+
+6. Find all the film categories in which there are between 55
+and 65 films. Return the names of these categories and the
+number of films per category, sorted by the number of films
+descending.
+
+SELECT name, COUNT(film_id) AS number
+FROM category JOIN film_category
+	ON category.category_id = film_category.category_id
+GROUP BY name
+HAVING number >= 55 AND number <= 65
+ORDER BY number DESC;
+
++----------+--------+
+| name     | number |
++----------+--------+
+| Action   |     64 |
+| New      |     63 |
+| Drama    |     62 |
+| Games    |     61 |
+| Sci-Fi   |     61 |
+| Children |     60 |
+| Comedy   |     58 |
+| Classics |     57 |
+| Travel   |     57 |
+| Horror   |     56 |
++----------+--------+
+10 rows in set (0,00 sec)
+
+7. In how many film categories is the average difference
+between the film replacement cost and the rental rate larger
+than 17?
+CREATE OR REPLACE VIEW Differences AS
+	SELECT name, AVG(replacement_cost - rental_rate) AS diff
+	FROM category JOIN film_category
+		ON category.category_id = film_category.category_id
+		JOIN film on film_category.film_id = film.film_id
+	GROUP BY name
+	ORDER BY diff DESC;
+
+Query OK, 0 rows affected (0,00 sec)
+
+SELECT COUNT(name) as count
+FROM Differences
+WHERE diff >17;
+
++-------+
+| count |
++-------+
+|     8 |
++-------+
+1 row in set (0,00 sec)
+
+8. Find the address district(s) name(s) such that the minimal
+postal code in the district(s) is maximal over all the
+districts. Make sure your query ignores empty postal codes
+and district names.
+
+SELECT district, min_postal
+FROM (
+	SELECT district, MIN(postal_code) AS min_postal
+	FROM address
+	GROUP BY district
+	HAVING district != ' ' AND min_postal != ' ') AS min_district_postal
+ORDER BY min_postal DESC
+LIMIT 1;
+
++----------+------------+
+| district | min_postal |
++----------+------------+
+| Crdoba   | 99865      |
++----------+------------+
+1 row in set (0,01 sec)
+
+9. Find the names (first and last) of all the actors and
+customers whose first name is the same as the first name of
+the actor with ID 101 (exclude the actor with ID 101).
+
+(SELECT CONCAT(first_name, ' ', last_name) AS fullname
+FROM customer
+WHERE first_name IN (SELECT first_name FROM actor WHERE actor_id = '101'))
+UNION
+(SELECT CONCAT(first_name, ' ', last_name) AS fullname
+FROM actor
+WHERE actor_id != '101' AND first_name IN (SELECT first_name FROM actor WHERE actor_id = '101'));
+
++--------------+
+| fullname     |
++--------------+
+| SUSAN WILSON |
+| SUSAN DAVIS  |
++--------------+
+2 rows in set (0,01 sec)
